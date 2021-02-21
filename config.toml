@@ -1,0 +1,74 @@
+baseURL = "https://1718-io.github.io/propositions-relatives-au-ric/"
+title = "Quant Au RIC"
+enableRobotsTXT = true
+# this example loads the theme as hugo module
+# comment out line below, and uncomment the line after it if you prefer to load the theme normally
+theme = "compose"
+themesDir = "./themes/"
+
+enableGitInfo = true
+
+disableKinds = ["taxonomy", "taxonomyTerm"]
+
+#  menu items
+[[menu.main]]
+    name = "Avant Propos"
+    weight = 2
+    url = "/docs/avant-propos/"
+
+[[menu.main]]
+    name = "La Proposition"
+    weight = 2
+    url = "/docs/ric-interne/"
+
+[[menu.main]]
+    name = "Les Objections"
+    weight = 3
+    url = "/docs/problemes-a-resoudre/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      typographer = false
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = false
+    style = "monokai"
+    tabWidth = 2
+  [markup.tableOfContents]
+    endLevel = 4
+    ordered = false
+    startLevel = 2
+
+# Everything below this are Site Params
+
+[params]
+
+  repo = "https://github.com/onweru/compose"
+
+  time_format_blog = "Monday, January 02, 2020"
+  time_format_default = "January 2, 2020"
+  enableDarkMode = true # set to false to disable darkmode by default # user will still have the option to use dark mode
+
+  # Site logo
+  [params.logo]
+    lightMode = "ric_carl_blue_green.png"
+    darkMode = "ric_carl_blue_green.png"
+
+  [params.source]
+    name = "Ce travail, sur GitHub"
+    icon = "github.svg"
+    url = "https://github.com/1718-io/propositions-relatives-au-ric"
+
+  # optional
+  # attribution. Feel free to delete this
+  [params.author]
+    name = "Jean-Baptiste Lasselle"
+    url = "https://github.com/Jean-Baptiste-Lasselle"

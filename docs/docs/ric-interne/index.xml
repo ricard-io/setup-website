@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Un RIC en interne: Statuts on Quant Au RIC</title>
+    <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/</link>
+    <description>Recent content in Un RIC en interne: Statuts on Quant Au RIC</description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Article 1 : RIC </title>
+      <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/article1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/article1/</guid>
+      <description>Prerequisites and installation Install Hugo You need a recent extended version (we recommend version 0.61 or later) of Hugo to do local builds and previews of sites (like this one) that uses this theme.
+If you install from the release page, make sure to get the extended Hugo version, which supports sass; you may need to scroll down the list of releases to see it.
+For comprehensive Hugo documentation, see gohugo.</description>
+    </item>
+    
+    <item>
+      <title>Article 1 : RIC immuable </title>
+      <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/article2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://1718-io.github.io/propositions-relatives-au-ric/docs/ric-interne/article2/</guid>
+      <description>Prerequisites and installation Install Hugo You need a recent extended version (we recommend version 0.61 or later) of Hugo to do local builds and previews of sites (like this one) that uses this theme.
+If you install from the release page, make sure to get the extended Hugo version, which supports sass; you may need to scroll down the list of releases to see it.
+For comprehensive Hugo documentation, see gohugo.</description>
+    </item>
+    
+  </channel>
+</rss>

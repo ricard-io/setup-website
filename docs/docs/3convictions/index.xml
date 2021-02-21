@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Un RIC, 3 Convictions on Quant Au RIC</title>
+    <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/</link>
+    <description>Recent content in Un RIC, 3 Convictions on Quant Au RIC</description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Première conviction : Le RIC peut réunir les Français</title>
+      <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/premiere-conviction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/premiere-conviction/</guid>
+      <description>Prerequisites Firstly, ensure you have installed the extended version of Hugo. See installation steps from Hugo&#39;s official docs.
+Getting up and running Read the prerequisites above and verify you&#39;re using the extended version of Hugo. There are at least two ways of quickly getting started with Hugo and the VMware Clarity theme:
+Option 1 (recommended) Generate a new Hugo site and add this theme as a Git submodule inside your themes folder:</description>
+    </item>
+    
+    <item>
+      <title>Deuxième Conviction: le pouvoir de résoudre des problèmes majeurs</title>
+      <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/deuxieme-conviction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/deuxieme-conviction/</guid>
+      <description>Prerequisites Firstly, ensure you have installed the extended version of Hugo. See installation steps from Hugo&#39;s official docs.
+Getting up and running Read the prerequisites above and verify you&#39;re using the extended version of Hugo. There are at least two ways of quickly getting started with Hugo and the VMware Clarity theme:
+Option 1 (recommended) Generate a new Hugo site and add this theme as a Git submodule inside your themes folder:</description>
+    </item>
+    
+    <item>
+      <title>Troisième Conviction: Un évènement majeur de l&#39;Histoire de France</title>
+      <link>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/troisieme-conviction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://1718-io.github.io/propositions-relatives-au-ric/docs/3convictions/troisieme-conviction/</guid>
+      <description>Prerequisites Firstly, ensure you have installed the extended version of Hugo. See installation steps from Hugo&#39;s official docs.
+Getting up and running Read the prerequisites above and verify you&#39;re using the extended version of Hugo. There are at least two ways of quickly getting started with Hugo and the VMware Clarity theme:
+Option 1 (recommended) Generate a new Hugo site and add this theme as a Git submodule inside your themes folder:</description>
+    </item>
+    
+  </channel>
+</rss>

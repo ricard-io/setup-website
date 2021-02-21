@@ -1,0 +1,197 @@
+version: 2.1
+
+parameters:
+  secrethub_org:
+    type: string
+    default: "ric1718"
+    description: "SecretHub Org to use to fetch secrets ?"
+  secrethub_repo:
+    type: string
+    default: "cicd"
+    description: "SecretHub Repo to use to fetch secrets ?"
+
+orbs:
+  heroku: circleci/heroku@1.2.3
+  docker: circleci/docker@1.5
+  secrethub: secrethub/cli@1.0.0
+jobs:
+  container_images_publish:
+    machine:
+      image: 'ubuntu-1604:201903-01'
+      resource_class: medium
+    environment:
+      SECRETHUB_ORG: << pipeline.parameters.secrethub_org >>
+      SECRETHUB_REPO: << pipeline.parameters.secrethub_repo >>
+    steps:
+      - checkout
+      - secrethub/install
+      - docker/install-docker-compose
+      - run:
+          name: "Container images build for the Heroku Deployment: Hugo Build (checking no hugo build error occurs)"
+          command: |
+            echo "Checking Circle CI Job env. variables"
+            echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
+            echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            source .heroku.env
+            export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
+            echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
+            docker-compose build hugo_heroku
+            # and now [quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
+      - run:
+          command: |
+            echo "Checking Circle CI Job env. variables"
+            echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
+            echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
+            QUAY_BOT_USERNAME=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/oci/quay-io/user-name)
+            QUAY_BOT_SECRET=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/oci/quay-io/user-pwd)
+            echo "QUAY_BOT_USERNAME=[${QUAY_BOT_USERNAME}]"
+            # echo "QUAY_BOT_SECRET=[${QUAY_BOT_SECRET}]"
+            docker login -u="${QUAY_BOT_USERNAME}" -p="${QUAY_BOT_SECRET}" quay.io
+            export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
+            docker tag "quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}" "quay.io/ric1718/une_proposition:stable-latest"
+            echo "checking [date time] (sometimes data time in Circle CI pipelines is wrong, so that Container registry rejects the [docker push]...)"
+            echo "date time in Circle CI Pipeline is [$(date)] "
+            date
+            docker push "quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}"
+            docker push "quay.io/ric1718/une_proposition:stable-latest"
+          name: "Container Image publish to Container Registry"
+
+  deploy_to_heroku:
+    machine:
+      image: 'ubuntu-1604:201903-01'
+      resource_class: medium
+    environment:
+      SECRETHUB_ORG: << pipeline.parameters.secrethub_org >>
+      SECRETHUB_REPO: << pipeline.parameters.secrethub_repo >>
+      HEROKU_APP_ID: ric-carl
+    steps:
+      - checkout
+      - secrethub/install
+      - heroku/install
+      - run:
+          name: "Heroku Check Authentication"
+          command: |
+            echo "Checking Heroku Authentication is successful, with the secrethub provided Heroku API Token"
+            echo "Checking context variables from [riccarl-cicd] context"
+            echo "Checking Circle CI Job env. variables"
+            echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
+            echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
+            echo "HEROKU_APP_ID=[${HEROKU_APP_ID}]"
+            # that's just to check how to
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            heroku auth:whoami
+      - run:
+          name: "Set Heroku Stack to [container]"
+          command: |
+            echo "Initializing Heroku Git repo"
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            heroku git:remote -a $HEROKU_APP_ID
+            heroku stack:set container --app $HEROKU_APP_ID
+      - run:
+          name: "Pulling Container Image built for the Heroku Deployment"
+          command: |
+            echo "Checking Circle CI Job env. variables"
+            echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
+            echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
+            export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
+            echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            docker pull quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}
+            # [quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}] should now be among local [docker images]
+      - run:
+          name: "Deploy to Heroku by docker pushing container image, website at https://ric-carl.herokuapp.com/ "
+          command: |
+            echo "Deploying to Heroku, by pushing the built docker image, and release it using the Heroku API"
+            # the process type, is the thing that you can find in the `heroku.yml` (for me it's `web`, and
+            # there are others, which I don't care about like for backends I guess, stuff like that)
+            export HEROKU_PROCESS_TYPE=web
+            export SECRETHUB_ORG=ric1718
+            export SECRETHUB_REPO=cicd
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+
+            docker login --username=_ --password=${HEROKU_API_KEY} registry.heroku.com
+            export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
+            echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+
+            docker tag quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG} registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
+            docker push registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
+
+            # ---
+            # After the image is pushed, you have one more thing to do, to complete the deployment.
+            # This "thing" consists of invoking one Heroku API Endpoint, to "release" the pushed container.
+            # The Heroku API Endpoint is [/apps/$HEROKU_APP_ID/formation]: it is supposed to
+            # "release a contgaienr image". Odd name for an endpoint supposed to do that...
+            # ---
+            # To invoke the Heroku API Endpoint, I need one container
+            # meta data, obtained by [docker inspect ${DOCKER_IMAGE_GUN} --format={{.Id}}]
+            # ---
+            # To be absolutely sure, I get this metadata from the exact docker image pushed to Heroku Container Regsitry, I
+            # remove all local container images, and then pull again the pushed image of the deployment.
+            # ---
+
+            docker system prune -f --all && docker system prune -f --volumes
+            export DOCKER_IMAGE_GUN=registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
+            docker pull ${DOCKER_IMAGE_GUN}
+            export DOCKER_IMAGE_ID=$(docker inspect ${DOCKER_IMAGE_GUN} --format={{.Id}})
+            # ---
+            # And now I have all I need to invoke the Heroku API Endpoint :
+            # ---
+            curl -iv -H "Authorization: Bearer ${HEROKU_API_KEY}" -X PATCH https://api.heroku.com/apps/$HEROKU_APP_ID/formation \
+              -d "{
+              \"updates\": [
+                {
+                  \"type\": \"${HEROKU_PROCESS_TYPE}\",
+                  \"docker_image\": \"${DOCKER_IMAGE_ID}\"
+                }
+              ]
+            }" \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
+
+workflows:
+  version: 2.1
+  build_and_deploy:
+    jobs:
+      - container_images_publish:
+          context: riccarl-cicd
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
+                - /^feature*/
+                - /^support*/
+                - /^bugfix*/
+                - /^hotfix*/
+                - /^release*/
+            tags:
+              # only: /^v.*/
+              only:
+                - /^[0-999].[0-999].[0-999]/
+                - /^[0-999].[0-999].[0-999]-alpha/
+                - /^[0-999].[0-999].[0-999]-beta/
+      - deploy_to_heroku:
+          context: riccarl-cicd
+          requires:
+            - container_images_publish
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
+                - /^feature*/
+                - /^support*/
+                - /^bugfix*/
+                - /^hotfix*/
+                - /^releases*/
+            tags:
+              # only: /^v.*/
+              only:
+                - /^[0-999].[0-999].[0-999]/
+                - /^[0-999].[0-999].[0-999]-alpha/
+                - /^[0-999].[0-999].[0-999]-beta/
