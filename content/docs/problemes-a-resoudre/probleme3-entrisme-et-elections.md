@@ -36,4 +36,4 @@ Pour palier le plus possible à cette antinomie, je me suis proposé de d'essaye
 
 ## Résolution du problème
 
-L'objet de l'[article 7](/docs/ric-interne/article7/), de l'[article 8](/docs/ric-interne/article8/), et de l'[article 9](/docs/ric-interne/article9/) , est de proposer des dispositions ouvrant la possibilité d'apopter une telle stratégie de participation aux élections, sans sacrifier le pouvoir suprême de contrôle des membres, sur leur propre organisation, par le "__RIC__ en interne".
+L'objet de l'[article 7](/docs/travaux-en-cours/article7/), de l'[article 8](/docs/travaux-en-cours/article8/), et de l'[article 9](/docs/travaux-en-cours/article9/) , est de proposer des dispositions ouvrant la possibilité d'apopter une telle stratégie de participation aux élections, sans sacrifier le pouvoir suprême de contrôle des membres, sur leur propre organisation, par le "__RIC__ en interne".

@@ -29,7 +29,7 @@ J'ai tout de même imédiatement objecté la chose suivante :
 > Très bien, mais si vosu dîtes qu'ilest juridiquement immpossible de rendre le `RIC` immuables dans des statuts d'organisation, comment pouvez-vous prétendre qu'il soit juridiquement possible de le rendre immuable dans la constitution Française ?
 >
 
-L'on m'a répondu que le ["problème de l'entrisme"](/docs/problemes-a-resoudre/probleme1-entrisme/) ne se pose pas au niveau du Pays, car :
+L'on m'a répondu que le ["problème de l'entrisme"](/docs/le-ric-kezakoprobleme1-entrisme/) ne se pose pas au niveau du Pays, car :
 * le Pays n'est pas une organsiation qui commence à un petit nombre, qui peut-être supplanté par "de nouveaux arrivés externes et hostiles"
 * le __RIC__ au niveau du pays implqiue des seuils de nombre de citoyen assez grands, pourque le problèem de l'entrisme ne puisse se poser.
 

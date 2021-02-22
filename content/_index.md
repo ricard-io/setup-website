@@ -1,31 +1,26 @@
 +++
-title = "Une proposition de RIC : Origine et Pourquoi"
+title = "Un Ricard sinon rien : Origine et Objectifs"
 
 +++
 {{< block "grid-2 mt-2" >}}
 {{< column >}}
 
-# Pourquoi ais-je rédigé ce document ? Que propose-t-il quant au __RIC__.
+# Un Ricard sinon rien : Qu'est-ce que c'est ?
 
-Depuis plusieurs dizaines de mois, je m'intéresse particulièrement au [concept de RIC](#).
+Nous sommes un groupe de travail, se concentrant sur deux objectifs :
 
-Je suis ouvert à toute discussion de mes convictions qui sont miennes, et en rédigerai mes arguments dans [`cet article`](/docs/3convictions/). Cependant, cette rédaction n'a pas pour objet la discussion de ces 3 convictions qui sont aujourd'hui miennes.
+> * Fournir aux citoyen français une technologie logicielle qui lui permette de souverainetement organiser des votes, de toutes nature.
 
+> * Etablir une relation complètement nouvelle, entre les citoyens dans leur ensemble, formant une société, et la corporation formée de ces citoyens qui sont des professionnels des technologies de l'information. Pour faie naître entre ces deux derniers, quelque chose qu n'a jamais été ni énoncé, ni proposé : un contrat social.
 
-## De l'objet de ce travail
+## Un mot sur le "RIC"
 
-L'objet de ce document, devenu un travail de construction d'une idée, est de démontrer que :
-
----
-- Pour une organsiation dont **le but principal, et prioritaire par rapport à tout autre, est l'instauration du `RIC` en France**, la mise en oeuvre d'un RIC en interne d'une organisation regroupant un grand nombre de citoyens, est possible.
----
-
-Il est aussi de répondre à une demande qui m'a été faite : "Toi qui défends avec tant d'ardeur cette proposition, rédiges-la, pour la proposer en bonne et due forme.". Aussi ce travail comporte __Une rédaction de statuts, proposant une définition de Statuts concrète opérationnelle__ : cette rédaction constitue une preuve de faisabilité.
-
-Enfin, il vous est possible de participer, proposer, objecter, pour cela je vous renvoie à la partie __[Avant Propos](/docs/avant-propos/)__
+Le RIC (Référendum d'Initiative Citoyenne) est une idée, un concept, qui à la fois :
+* a occasionné les premières discussions entre les fondateurs de ce groupe de travail,
+* et qui est un exemple typique, montrant en quoi, le citoyen peut avoir besoin d'une souveraineté à orgnaniser, et maîtriser un vote : L'un des aspects du RIC, est que le citoyen ait le pouvoir régalien d'initier un vote, et pour qu'il conserve ce pouvoir, il lui faut le moyen technique, de lexercer souverainement (sans nécessité de l'accord d'aucun Homme, ni d'aucune organisation quelle qu'elle soit).
 
 
- {{< button "/docs/ric-interne/" "La rédaction des statuts proposés" >}}
+ {{< button "/docs/travaux-en-cours/" "La rédaction des statuts proposés" >}}
 
 
 

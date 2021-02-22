@@ -1,6 +1,6 @@
 ---
-title: 'Première conviction : Le RIC peut réunir les Français'
-weight: 31
+title: 'Le RIC Constitutionnel'
+weight: 81
 ---
 
 ## Prerequisites

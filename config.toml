@@ -1,5 +1,5 @@
-baseURL = "https://1718-io.github.io/propositions-relatives-au-ric/"
-title = "Quant Au RIC"
+baseURL = "https://un-ricard-sinon-rien.io"
+title = "Un RICard sinon rien"
 enableRobotsTXT = true
 # this example loads the theme as hugo module
 # comment out line below, and uncomment the line after it if you prefer to load the theme normally
@@ -17,14 +17,29 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
     url = "/docs/avant-propos/"
 
 [[menu.main]]
-    name = "La Proposition"
-    weight = 2
-    url = "/docs/ric-interne/"
+    name = "Travaux en cours"
+    weight = 6
+    url = "/docs/travaux-en-cours/"
 
 [[menu.main]]
-    name = "Les Objections"
+    name = "Qu'est-ce que le RIC?"
+    weight = 5
+    url = "/docs/le-ric-kezako"
+
+[[menu.main]]
+    name = "La Matrice"
     weight = 3
-    url = "/docs/problemes-a-resoudre/"
+    url = "/docs/matrice-de-comparaison/"
+
+
+[[menu.main]]
+    name = "Actu & Evènements"
+    weight = 4
+    url = "/docs/actus-evenements/"
+
+
+
+
 
 [markup]
   [markup.goldmark]
@@ -51,7 +66,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
 
 [params]
 
-  repo = "https://github.com/onweru/compose"
+  repo = "https://github.com/ricard-io/setup-website"
 
   time_format_blog = "Monday, January 02, 2020"
   time_format_default = "January 2, 2020"
@@ -65,10 +80,10 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
   [params.source]
     name = "Ce travail, sur GitHub"
     icon = "github.svg"
-    url = "https://github.com/1718-io/propositions-relatives-au-ric"
+    url = "https://github.com/ricard-io/setup-website"
 
   # optional
   # attribution. Feel free to delete this
-  [params.author]
-    name = "Jean-Baptiste Lasselle"
-    url = "https://github.com/Jean-Baptiste-Lasselle"
+  # [params.author]
+    # name = "Jean-Baptiste Lasselle"
+    # url = "https://github.com/Jean-Baptiste-Lasselle"

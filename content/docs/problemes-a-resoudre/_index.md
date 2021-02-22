@@ -12,4 +12,4 @@ Pour chacune d'entre elles, je vais :
 
 ---
 
-{{< button "/docs/problemes-a-resoudre/probleme1-entrisme/" "Première Objection / Premier problème" >}}
+{{< button "/docs/le-ric-kezakoprobleme1-entrisme/" "Première Objection / Premier problème" >}}
