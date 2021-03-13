@@ -58,4 +58,4 @@ Cette idée, cette "technique", je l'ai parfaitement comprise, une fois expliqu�
 
 ### Remarque finale
 
-Si j'ai cité ici une de vos réponses, de vos propos, issus d'un échange oral, je vous invite à me faire parvenir par e-mail, correctifs sur vos propos, que je publierai corrigés, à l'adresse email suivante : __jean.baptiste.lasselle.ric1718@gmail.com__
+Si j'ai cité ici une de vos réponses, de vos propos, issus d'un échange oral, je vous invite à me faire parvenir par e-mail, correctifs sur vos propos, que je publierai corrigés, à l'adresse email suivante : __jean.baptiste.lasselle.ricard-io@gmail.com__

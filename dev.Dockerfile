@@ -49,15 +49,15 @@ FROM hugo_build_base AS hugo_build
 # FROM alpine:${ALPINE_OCI_IMAGE_TAG} AS hugo_build
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# ---                  HUGO BUILD             --- #
+# ---                  HUGO BUILD                         --- #
 # ---         into [/usr/local/apache2/htdocs]            --- #
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 
-RUN mkdir -p /pokus.io/hugo/src/
-COPY . /pokus.io/hugo/src/
-COPY .git /pokus.io/hugo/src/
-RUN ls -allh /pokus.io/hugo/src/
-RUN export PATH=$PATH:/usr/local/go/bin && cd /pokus.io/hugo/src/ && hugo -b "${HUGO_BASE_URL}"
+RUN mkdir -p /ricard-io.io/hugo/src/
+COPY . /ricard-io.io/hugo/src/
+COPY .git /ricard-io.io/hugo/src/
+RUN ls -allh /ricard-io.io/hugo/src/
+RUN export PATH=$PATH:/usr/local/go/bin && cd /ricard-io.io/hugo/src/ && hugo -b "${HUGO_BASE_URL}"
 
 # +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ #
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
@@ -98,7 +98,7 @@ ENV PORT=$PORT
 
 
 USER root
-RUN mkdir -p /pokus.io
+RUN mkdir -p /ricard-io.io
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 # ---         INSTALLING RESULT OF HUGO BUILD             --- #
 # ---         into [/usr/local/apache2/htdocs]            --- #
@@ -106,12 +106,12 @@ RUN mkdir -p /pokus.io
 
 RUN rm -fr /usr/local/apache2/htdocs
 RUN mkdir -p /usr/local/apache2/htdocs
-RUN mkdir -p /pokus.io/retrieved_hugo_build
-COPY --from=hugo_build /pokus.io/hugo/src/public /pokus.io/retrieved_hugo_build
-RUN echo "Right after retrieveing the result of the hugo build , content of  [/pokus.io/retrieved_hugo_build] : "
-RUN ls -allh /pokus.io/retrieved_hugo_build
+RUN mkdir -p /ricard-io.io/retrieved_hugo_build
+COPY --from=hugo_build /ricard-io.io/hugo/src/public /ricard-io.io/retrieved_hugo_build
+RUN echo "Right after retrieveing the result of the hugo build , content of  [/ricard-io.io/retrieved_hugo_build] : "
+RUN ls -allh /ricard-io.io/retrieved_hugo_build
 #   fRench do it, Let(')s do it, Let's...
-RUN cp -fR /pokus.io/retrieved_hugo_build/* /usr/local/apache2/htdocs
+RUN cp -fR /ricard-io.io/retrieved_hugo_build/* /usr/local/apache2/htdocs
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 # ---  APACHE CONF FILE AND RUN SCRIPT (with healthcheck) --- #
@@ -120,17 +120,17 @@ RUN cp -fR /pokus.io/retrieved_hugo_build/* /usr/local/apache2/htdocs
 RUN rm -f /usr/local/apache2/conf/httpd.conf
 COPY httpd.conf /usr/local/apache2/conf
 
-COPY heroku.apache.start.sh /pokus.io
-COPY heroku.container.healthcheck.sh /pokus.io
-RUN chmod +x /pokus.io/*.sh
+COPY heroku.apache.start.sh /ricard-io.io
+COPY heroku.container.healthcheck.sh /ricard-io.io
+RUN chmod +x /ricard-io.io/*.sh
 
 #
 # healthcheck:
-#   test: ["CMD", "/pokus.io/website.healthcheck.sh"]
+#   test: ["CMD", "/ricard-io.io/website.healthcheck.sh"]
 #   interval: 5s
 #   timeout: 10s
 #   retries: 30
 #   start_period: 60s
 #
 
-ENTRYPOINT ["/pokus.io/heroku.apache.start.sh"]
+ENTRYPOINT ["/ricard-io.io/heroku.apache.start.sh"]

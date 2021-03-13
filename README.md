@@ -155,7 +155,7 @@ Header set Access-Control-Allow-Origin "*"
 
 ### Docker images and the GIT COMMIT ID
 
-* To retrieve the GIT COMMIT ID from the latest docker image : `docker inspect --format '{{ index .Config.Labels "git.commit.id"}}' "quay.io/ric1718/une_proposition:stable-latest"`
+* To retrieve the GIT COMMIT ID from the latest docker image : `docker inspect --format '{{ index .Config.Labels "git.commit.id"}}' "quay.io/ricard-io/une_proposition:stable-latest"`
 * And to find the same commit on a git repo :
 
 ```bash
