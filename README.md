@@ -44,6 +44,8 @@ cd "${WHERE_I_WORK}"
 
 export FEATURE_ALIAS='dev-compose'
 export DESIRED_VERSION="feature/${FEATURE_ALIAS}"
+export DESIRED_VERSION="0.0.1"
+
 git checkout "${DESIRED_VERSION}"
 
 docker-compose up -d
