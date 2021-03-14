@@ -76,7 +76,7 @@ jobs:
           name: "Heroku Check Authentication"
           command: |
             echo "Checking Heroku Authentication is successful, with the secrethub provided Heroku API Token"
-            echo "Checking context variables from [riccard-io-cicd] context"
+            echo "Checking context variables from [ricard-io-cicd] context"
             echo "Checking Circle CI Job env. variables"
             echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
             echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
@@ -158,7 +158,7 @@ workflows:
   build_and_deploy:
     jobs:
       - container_images_publish:
-          context: riccard-io-cicd
+          context: ricard-io-cicd
           filters:
             branches:
               ignore:
@@ -176,7 +176,7 @@ workflows:
                 - /^[0-999].[0-999].[0-999]-alpha/
                 - /^[0-999].[0-999].[0-999]-beta/
       - deploy_to_heroku:
-          context: riccard-io-cicd
+          context: ricard-io-cicd
           requires:
             - container_images_publish
           filters:

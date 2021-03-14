@@ -33,7 +33,7 @@ secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/email/address"
 secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/email/password"
 secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/email/backup_email"
 # ---
-# Circle CI  Service Account for the [riccard-io-cicd] Cirlce CI context for
+# Circle CI  Service Account for the [ricard-io-cicd] Cirlce CI context for
 # the https://github.com/ricard-io Circle CI Org
 secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/circleci/secrethub-svc-account/token"
 secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/oci/quay-io/user-name"
