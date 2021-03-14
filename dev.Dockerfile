@@ -54,83 +54,11 @@ FROM hugo_build_base AS hugo_build
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 
 RUN mkdir -p /ricard-io.io/hugo/src/
-COPY . /ricard-io.io/hugo/src/
-COPY .git /ricard-io.io/hugo/src/
+# COPY . /ricard-io.io/hugo/src/
+# COPY .git /ricard-io.io/hugo/src/
 RUN ls -allh /ricard-io.io/hugo/src/
-RUN export PATH=$PATH:/usr/local/go/bin && cd /ricard-io.io/hugo/src/ && hugo -b "${HUGO_BASE_URL}"
 
-# +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# ---               PUBLISHED CONTAINER IMAGE             --- #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ #
-
-
-FROM httpd:${HTTPD_OCI_IMAGE_TAG} AS release
-
-ARG HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
-ARG GIT_COMMIT_ID=${GIT_COMMIT_ID}
-ARG CICD_BUILD_ID=${CICD_BUILD_ID}
-
-LABEL maintainer="Jean-Baptiste-Laselle <jean.baptiste.lasselle@gmail.com>"
-LABEL author="Jean-Baptiste-Laselle <jean.baptiste.lasselle@gmail.com>"
-LABEL cicd.build.id="${CICD_BUILD_ID}"
-LABEL git.commit.id="${GIT_COMMIT_ID}"
-LABEL daymood="https://www.youtube.com/watch?v=v-JsqKlVVGk&list=RDv-JsqKlVVGk"
-LABEL oci.image.base="httpd:${HTTPD_OCI_IMAGE_TAG}"
-
-# --- HEROKU ENV.
-#
-# https://help.heroku.com/PPBPA231/how-do-i-use-the-port-environment-variable-in-container-based-apps
-#
-# In a word :
-# Heroku platfor will assign a value to the PORT variable, and
-# do the network setup with reverse proxying. So Basically I just haveto know that
-# the PORT environment variable is there where the network will happen, where the network traffic will travel : I can listen on that port if I want, for example
-# At any rate, I should NOT EVER
-# EXPOSE $PORT
-
-# Okay, so my Apache HTTP Server should listen on port number defined by $PORT
-ARG PORT
-ENV PORT=$PORT
-
-
-USER root
-RUN mkdir -p /ricard-io.io
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# ---         INSTALLING RESULT OF HUGO BUILD             --- #
-# ---         into [/usr/local/apache2/htdocs]            --- #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-
-RUN rm -fr /usr/local/apache2/htdocs
-RUN mkdir -p /usr/local/apache2/htdocs
-RUN mkdir -p /ricard-io.io/retrieved_hugo_build
-COPY --from=hugo_build /ricard-io.io/hugo/src/public /ricard-io.io/retrieved_hugo_build
-RUN echo "Right after retrieveing the result of the hugo build , content of  [/ricard-io.io/retrieved_hugo_build] : "
-RUN ls -allh /ricard-io.io/retrieved_hugo_build
-#   fRench do it, Let(')s do it, Let's...
-RUN cp -fR /ricard-io.io/retrieved_hugo_build/* /usr/local/apache2/htdocs
-
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# ---  APACHE CONF FILE AND RUN SCRIPT (with healthcheck) --- #
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-# This [httpd.conf] is customized with CORS rules
-RUN rm -f /usr/local/apache2/conf/httpd.conf
-COPY httpd.conf /usr/local/apache2/conf
-
-COPY heroku.apache.start.sh /ricard-io.io
-COPY heroku.container.healthcheck.sh /ricard-io.io
-RUN chmod +x /ricard-io.io/*.sh
-
-#
-# healthcheck:
-#   test: ["CMD", "/ricard-io.io/website.healthcheck.sh"]
-#   interval: 5s
-#   timeout: 10s
-#   retries: 30
-#   start_period: 60s
-#
-
-ENTRYPOINT ["/ricard-io.io/heroku.apache.start.sh"]
+EXPOSE 1313
+# RUN export PATH=$PATH:/usr/local/go/bin && cd /ricard-io.io/hugo/src/ && hugo -b "${HUGO_BASE_URL}"
+RUN echo 'RUN export PATH=$PATH:/usr/local/go/bin' > /ricard-io.io/entrypoint.sh && chmod +x /ricard-io.io/entrypoint.sh
+ENTRYPOINT [ "/ricard-io.io/entrypoint.sh" ]
