@@ -164,13 +164,14 @@ workflows:
               ignore:
                 - master
                 - develop
-                - /^feature*/
-                - /^support*/
-                - /^bugfix*/
-                - /^hotfix*/
-                - /^release*/
+                # ---
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # ---
             tags:
-              # only: /^v.*/
               only:
                 - /^[0-999].[0-999].[0-999]/
                 - /^[0-999].[0-999].[0-999]-alpha/
@@ -184,13 +185,14 @@ workflows:
               ignore:
                 - master
                 - develop
-                - /^feature*/
-                - /^support*/
-                - /^bugfix*/
-                - /^hotfix*/
-                - /^releases*/
+                # ---
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # ---
             tags:
-              # only: /^v.*/
               only:
                 - /^[0-999].[0-999].[0-999]/
                 - /^[0-999].[0-999].[0-999]-alpha/
