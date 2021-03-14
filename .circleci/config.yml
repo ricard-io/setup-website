@@ -38,7 +38,8 @@ jobs:
             echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .cms.env
             echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .cms.env
             echo "CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}" | tee -a .cms.env
-            docker-compose -f ./docker-compose.build.yml build hugo_heroku
+            source .cms.env
+            docker-compose -f ./docker-compose.build.yml build hugo_cms
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
             docker images
 
@@ -55,6 +56,10 @@ jobs:
             docker login -u="${QUAY_BOT_USERNAME}" -p="${QUAY_BOT_SECRET}" quay.io
             source .cms.env
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
+            export CICD_BUILD_ID=$CIRCLE_BUILD_NUM
+            export OCI_IMAGE_GUN="quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}"
+            export CICD_BUILD_TIMESTAMP=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.cicd.build.timestamp"}}' "${OCI_IMAGE_GUN}")
             echo "GIT_COMMIT_ID=[${GIT_COMMIT_ID}]"
             echo "CICD_BUILD_ID=[${CICD_BUILD_ID}]"
             echo "CICD_BUILD_TIMESTAMP=[${CICD_BUILD_TIMESTAMP}]"
@@ -68,6 +73,7 @@ jobs:
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            source .heroku.env
             export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
             export CICD_BUILD_ID=$CIRCLE_BUILD_NUM
             export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
