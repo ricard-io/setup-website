@@ -99,8 +99,8 @@ export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=1.15.6 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=0.78.2 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ricard-io.herokuapp.com/"
 
-# DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
-# DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
+# DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ricardio/website:dev
+# DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ricardio/website:dev
 
 # docker-compose down --rmi all && docker system prune -f --all && cd && rm -fr ~/propositions-relatives-au-ric
 ```
