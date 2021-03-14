@@ -1,25 +1,38 @@
 # Containerization and CI CD
 
-### What's in this release
+## What's in this release
 
-* A Docker-Compose which allows building and running locally the Docker image, the localwebsite URL which can be configured with the `HUGO_BASE_URL` in the `.env` file.
-* The Circle CI Pipeline deploys the website to Heroku. The `.heroku.env` file configures the container image build, for the container image to be deployed to heroku.
-* The Circle CI Pipeline requires initializing secrets into secrethub, as documented in https://github.com/1718-io/propositions-relatives-au-ric/tree/0.0.2/pipeline/secrets
+* A Docker-Compose which allows building and running locally thye website at http://127.0.0.1:1313 , and in watch mode : if you change a file, the change is immediately rendered into the browser.
+* The Circle CI Pipeline deploys the website to Heroku at https://ricard-io.herokuapp.com . The `.heroku.env` file configures the container image build, for the container image to be deployed to heroku.
+* The Circle CI Pipeline requires initializing secrets into secrethub, as documented in https://github.com/ricard-io/secrets-management
 
-### How to's
+## How to's
 
-* To deploy a new version of the website, jsut make a git flow release, using pure semver, and the Circle CI Pipelien will process the deployment
+### Content management
 
-* In this version, the full example content is ready to serve with the hugo dev server, like this :
+
+You need installed on your machine :
+* `docker`, and `docker-compose`
+* `git`
+* and we strongly recommend the `git-flow AVH Edition` plugin
+
+
+#### GNU/Linux and MacOS
+
+* Open a terminal shell session, type the `bash` command, hit the Return keyborad key, and then run :
 
 ```bash
-git clone git@github.com:gravitee-lab/propositions-relatives-au-ric.git ~/propositions-relatives-au-ric
-cd ~/propositions-relatives-au-ric
-git checkout "0.0.0"
-export COMMIT_MESSAGE="feat.(${FEATURE_ALIAS}): adding build and run with https://github.com/gravitee-io/gravitee-docs/blob/master/Dockerfile "
-hugo serve --watch -b http://127.0.0.1:1313/
+export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
+
+git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
+cd "${WHERE_I_WORK}"
+
+export FEATURE_ALIAS='dev-compose'
+export DESIRED_VERSION="feature/${FEATURE_ALIAS}"
+export DESIRED_VERSION="0.0.1"
+
+git checkout "${DESIRED_VERSION}"
+
+./cms.users.utilities/cms.image.build.sh
+docker-compose up -d
 ```
-* to run this, you must have installed on yur machine :
-  * Hugo extended at least version `0.78.2` version,
-  * golang version `1.14.4`,
- *  see `README.md` for full installations instructions of those two on Debian GNU/Linux

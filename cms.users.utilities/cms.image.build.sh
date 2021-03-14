@@ -10,6 +10,6 @@ echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .cms.env
 echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .cms.env
 echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .cms.env
 source .cms.env
-docker-compose -f ./docker-compose.build.yml build hugo_cms
+docker-compose -f ./docker-compose.cms.build.yml build hugo_cms
 # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
 docker images

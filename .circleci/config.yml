@@ -39,12 +39,25 @@ jobs:
             echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .cms.env
             echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .cms.env
             source .cms.env
+            # ---
+            # interpolation of build args (don't know why seems necessary in Circle CI and
+            # not on my machines, maybe different versions of docker-compose)
+            # ---
+            sed -i "s#ALPINE_OCI_IMAGE_TAG=.*#ALPINE_OCI_IMAGE_TAG=${ALPINE_OCI_IMAGE_TAG}#g" docker-compose.cms.build.yml
+            sed -i "s#GOLANG_VERSION=.*#GOLANG_VERSION=${GOLANG_VERSION}#g" docker-compose.cms.build.yml
+            sed -i "s#HUGO_VERSION=.*#HUGO_VERSION=${HUGO_VERSION}#g" docker-compose.cms.build.yml
+            sed -i "s#GIT_COMMIT_ID=.*#GIT_COMMIT_ID=${GIT_COMMIT_ID}#g" docker-compose.cms.build.yml
+            sed -i "s#CICD_BUILD_ID=.*#CICD_BUILD_ID=${CICD_BUILD_ID}#g" docker-compose.cms.build.yml
+            sed -i "s#CICD_BUILD_TIMESTAMP=.*#CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}#g" docker-compose.cms.build.yml
+            sed -i "s#QUAY_OCI_IMAGE_TAG=.*#QUAY_OCI_IMAGE_TAG=${QUAY_OCI_IMAGE_TAG}#g" docker-compose.cms.build.yml
+            sed -i "s#image: quay.io/ricardio/website:.*#image: quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}#g" docker-compose.cms.build.yml
+            # ---
             echo "# --------------------------------------------------------------------------- #"
             echo "# -------   DOCKER COMPOSE CONFIG : "
             echo "# --------------------------------------------------------------------------- #"
-            docker-compose -f ./docker-compose.build.yml config
+            docker-compose -f ./docker-compose.cms.build.yml config
             echo "# --------------------------------------------------------------------------- #"
-            docker-compose -f ./docker-compose.build.yml build hugo_cms
+            docker-compose -f ./docker-compose.cms.build.yml build hugo_cms
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
             docker images
 
@@ -86,7 +99,7 @@ jobs:
             echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .heroku.env
             echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .heroku.env
             source .heroku.env
-            docker-compose -f ./docker-compose.build.yml build hugo_heroku
+            docker-compose -f ./docker-compose.heroku.build.yml build hugo_heroku
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
             docker images
 
@@ -203,6 +216,74 @@ jobs:
               -H "Content-Type: application/json" \
               -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
 
+  content_mgmt_job:
+    machine:
+      image: 'ubuntu-1604:201903-01'
+      resource_class: medium
+    steps:
+      - checkout
+      - secrethub/install
+      - docker/install-docker-compose
+      - run:
+          name: "Content Management: Hugo Build (checking no hugo build error occurs)"
+          command: |
+            echo "Checking Circle CI Job env. variables"
+            export GIT_RELEASE_TAG=$(git branch -a | grep '*' | awk '{print $2}')
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-cms
+            echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            source .heroku.env
+            export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
+            export CICD_BUILD_ID=$CIRCLE_BUILD_NUM
+            export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
+            export CICD_BUILD_TIMESTAMP=$(date)
+            echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .heroku.env
+            echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .heroku.env
+            echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .heroku.env
+            source .heroku.env
+            docker-compose -f ./docker-compose.heroku.build.yml build hugo_heroku
+            # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
+            docker images
+
+
+  content_mgmt_job:
+    machine:
+      image: 'ubuntu-1604:201903-01'
+      resource_class: medium
+    steps:
+      - checkout
+      - secrethub/install
+      - docker/install-docker-compose
+      - run:
+          name: "Content Management: Hugo Build (checking no hugo build error occurs)"
+          command: |
+            echo "Checking Circle CI Job env. variables"
+            export GIT_BRANCH_NAME=$(git branch -a | grep '*' | awk '{print $2}')
+            export GIT_RELEASE_TAG=${GIT_BRANCH_NAME}
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-cms
+            echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
+            source .heroku.env
+            export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
+            export CICD_BUILD_ID=$CIRCLE_BUILD_NUM
+            export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
+            export CICD_BUILD_TIMESTAMP=$(date)
+            echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .heroku.env
+            echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .heroku.env
+            echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .heroku.env
+            source .heroku.env
+            docker-compose -f ./docker-compose.heroku.build.yml build hugo_heroku
+            # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
+            docker images
+      - run:
+          name: "Content Management: deliver with Pull Request"
+          command: |
+            echo "# ---"
+            echo "# Triggered every time a content writer git pushes"
+            echo "# the "READY_\${GIT_BRANCH_NAME}" git tag to"
+            echo "# submit his work: then octokit will create a PR to the git develop"
+            echo "# ---"
+            echo "Not implemented yet"
+            exit 1
+
 workflows:
   version: 2.1
   build_and_deploy:
@@ -247,3 +328,33 @@ workflows:
                 - /^[0-999].[0-999].[0-999]/
                 - /^[0-999].[0-999].[0-999]-alpha/
                 - /^[0-999].[0-999].[0-999]-beta/
+  # ---
+  # triggered every time a content writer git pushs to his content branch
+  content_mgmt:
+    jobs:
+      - content_mgmt_job:
+          context: ricard-io-cicd
+          filters:
+            branches:
+              only:
+                # ---
+                - /^content\/.*/
+                # ---
+  # ---
+  # Triggered every time a content writer git pushes
+  # the "READY_${CONTENT_ALIAS}_${USERNAME_ALIAS}" git tag to
+  # submit his work: then octokit will create a PR to develop
+  # ---
+  deliver_content:
+    jobs:
+      - deliver_content_job:
+          context: ricard-io-cicd
+          filters:
+            branches:
+              only:
+                # ---
+                - /^content\/.*/
+                # ---
+            tags:
+              only:
+                - /^READY_.*/
