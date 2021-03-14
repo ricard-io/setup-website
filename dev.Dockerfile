@@ -60,5 +60,6 @@ RUN ls -allh /ricard-io.io/hugo/src/
 
 EXPOSE 1313
 # RUN export PATH=$PATH:/usr/local/go/bin && cd /ricard-io.io/hugo/src/ && hugo -b "${HUGO_BASE_URL}"
-RUN echo 'RUN export PATH=$PATH:/usr/local/go/bin' > /ricard-io.io/entrypoint.sh && chmod +x /ricard-io.io/entrypoint.sh
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' > /ricard-io.io/entrypoint.sh
+RUN chmod +x /ricard-io.io/entrypoint.sh
 ENTRYPOINT [ "/ricard-io.io/entrypoint.sh" ]
