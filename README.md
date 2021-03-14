@@ -32,8 +32,24 @@ To work on this project, you will need on your machine, to have intalled :
 
 Below you will find recipes to install Golang and hugo "extended" on a GNU/Linux machine.
 
+### Docker-Compose
 
-### Debian and GNU / Linux
+```bash
+export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
+
+git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
+cd "${WHERE_I_WORK}"
+
+export FEATURE_ALIAS='pipeline-setup'
+
+git checkout "feature/${FEATURE_ALIAS}"
+
+docker-compose up -d hugo_dev
+
+
+```
+
+### Debian and GNU / Linux : bare machine
 
 #### Basic workflow
 
@@ -58,12 +74,12 @@ ssh-add ~/.ssh.perso.backed/id_rsa
 export GIT_SSH_COMMAND='ssh -i ~/.ssh.perso.backed/id_rsa'
 ssh -Ti ~/.ssh.perso.backed/id_rsa git@github.com
 
-# if [ -d ~/ricard-io-website ]; then
-  # rm -fr ~/ricard-io-website
+# if [ -d "${WHERE_I_WORK}" ]; then
+  # rm -fr "${WHERE_I_WORK}"
 # fi;
 
-git clone git@github.com:ricard-io/setup-website.git ~/ricard-io-website
-cd ~/ricard-io-website
+git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
+cd "${WHERE_I_WORK}"
 
 export FEATURE_ALIAS='ric-interne'
 # git flow feature start ${FEATURE_ALIAS} && git push -u origin --all
@@ -155,7 +171,7 @@ Header set Access-Control-Allow-Origin "*"
 
 ### Docker images and the GIT COMMIT ID
 
-* To retrieve the GIT COMMIT ID from the latest docker image : `docker inspect --format '{{ index .Config.Labels "git.commit.id"}}' "quay.io/ric1718/une_proposition:stable-latest"`
+* To retrieve the GIT COMMIT ID from the latest docker image : `docker inspect --format '{{ index .Config.Labels "git.commit.id"}}' "quay.io/ricard-io/une_proposition:stable-latest"`
 * And to find the same commit on a git repo :
 
 ```bash
