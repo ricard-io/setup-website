@@ -37,7 +37,7 @@ jobs:
             export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
             echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .cms.env
             echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .cms.env
-            echo "CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}" | tee -a .cms.env
+            echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .cms.env
             source .cms.env
             docker-compose -f ./docker-compose.build.yml build hugo_cms
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
@@ -79,7 +79,7 @@ jobs:
             export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
             echo "GIT_COMMIT_ID=${GIT_COMMIT_ID}" | tee -a .heroku.env
             echo "CICD_BUILD_ID=${CICD_BUILD_ID}" | tee -a .heroku.env
-            echo "CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}" | tee -a .heroku.env
+            echo "CICD_BUILD_TIMESTAMP='${CICD_BUILD_TIMESTAMP}'" | tee -a .heroku.env
             source .heroku.env
             docker-compose -f ./docker-compose.build.yml build hugo_heroku
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
