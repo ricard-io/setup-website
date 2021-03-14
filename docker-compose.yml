@@ -2,41 +2,14 @@ version: "3.7"
 
 services:
   hugo_cms:
-    # we need extended, and nodejs for sass!
     image: quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
     container_name: hugo_cms
-    build:
-       context: .
-       dockerfile: dev.Dockerfile
-       args:
-         - HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
-         - GOLANG_VERSION=${GOLANG_VERSION}
-         - HUGO_VERSION=${HUGO_VERSION}
-         - HUGO_BASE_URL=${HUGO_BASE_URL}
-         - GIT_COMMIT_ID=${GIT_COMMIT_ID}
-         # - HUGO_BASE_URL=https://ric-carl.herokuapp.com/
-    command: hugo serve --watch -b ${HUGO_BASE_URL}
+    command: hugo serve --watch --baseURL http://127.0.0.1:1313/ -b 0.0.0.0
     # environment:
       # - HUGO_BASE_URL=${HUGO_BASE_URL}
     env_file:
-      - ./.cms.cms
+      - ./.cms.env
     volumes:
       - .:/ricard-io.io/hugo/src/:rw
     ports:
-      # - 0.0.0.0:1313:1313
-      - 0.0.0.0:8080:1313
-  hugo_heroku:
-    # we need extended, and nodejs for sass!
-    image: quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
-    container_name: hugo_heroku
-    build:
-       context: .
-       dockerfile: heroku.Dockerfile
-       args:
-         - HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
-         - GOLANG_VERSION=${GOLANG_VERSION}
-         - HUGO_VERSION=${HUGO_VERSION}
-         - HUGO_BASE_URL=${HUGO_BASE_URL}
-         - GIT_COMMIT_ID=${GIT_COMMIT_ID}
-    env_file:
-      - ./.heroku.env
+      - 0.0.0.0:1313:1313
