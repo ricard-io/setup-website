@@ -40,7 +40,7 @@ export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
 git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
 cd "${WHERE_I_WORK}"
 
-export FEATURE_ALIAS='pipeline-setup'
+export FEATURE_ALIAS='dev-compose'
 
 git checkout "feature/${FEATURE_ALIAS}"
 
