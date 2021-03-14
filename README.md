@@ -48,7 +48,9 @@ export DESIRED_VERSION="0.0.1"
 
 git checkout "${DESIRED_VERSION}"
 
+./cms.image.build.sh
 docker-compose up -d
+
 ```
 
 ### Debian and GNU / Linux : bare machine
