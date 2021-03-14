@@ -1,28 +1,16 @@
 version: "3.7"
 
 services:
-  hugo_dev:
+  hugo_cms:
     # we need extended, and nodejs for sass!
     image: quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}
-    container_name: hugo_dev
-    build:
-       context: .
-       dockerfile: dev.Dockerfile
-       args:
-         - HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
-         - GOLANG_VERSION=${GOLANG_VERSION}
-         - HUGO_VERSION=${HUGO_VERSION}
-         - HUGO_BASE_URL=${HUGO_BASE_URL}
-         - GIT_COMMIT_ID=${GIT_COMMIT_ID}
-         # - HUGO_BASE_URL=https://ric-carl.herokuapp.com/
+    container_name: hugo_cms
     restart: always
-    command: hugo serve --watch -b ${HUGO_BASE_URL}
-    # environment:
-      # - HUGO_BASE_URL=${HUGO_BASE_URL}
+    command: hugo serve --watch --baseURL http://127.0.0.1:1313/ --bind 0.0.0.0 -p 1313
+    # entrypoint: bash
     env_file:
-      - ./.env.dev
+      - ./.cms.env
     volumes:
       - .:/ricard-io.io/hugo/src/:rw
     ports:
-      # - 0.0.0.0:1313:1313
-      - 0.0.0.0:8080:1313
+      - 0.0.0.0:1313:1313

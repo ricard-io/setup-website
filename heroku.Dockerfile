@@ -10,7 +10,6 @@ ARG ALPINE_OCI_IMAGE_TAG=${ALPINE_OCI_IMAGE_TAG}
 ARG GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}
 ARG HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
 FROM golang:$GOLANG_VERSION-alpine$ALPINE_OCI_IMAGE_TAG AS hugo_build_base
-# FROM alpine:${ALPINE_OCI_IMAGE_TAG} AS hugo_build
 
 ARG ALPINE_OCI_IMAGE_TAG=${ALPINE_OCI_IMAGE_TAG:-'latest'}
 
@@ -33,6 +32,7 @@ RUN export PATH=$PATH:/usr/local/go/bin && go version
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 
 COPY heroku.alpine.hugo-extended.setup.sh .
+# we need extended, and nodejs for sass!
 RUN chmod +x ./heroku.alpine.hugo-extended.setup.sh && ./heroku.alpine.hugo-extended.setup.sh
 RUN echo "Is Hugo properly installed ?"
 RUN export PATH=$PATH:/usr/local/go/bin && hugo version && hugo env
@@ -73,20 +73,28 @@ FROM httpd:${HTTPD_OCI_IMAGE_TAG} AS release
 ARG HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
 ARG GIT_COMMIT_ID=${GIT_COMMIT_ID}
 ARG CICD_BUILD_ID=${CICD_BUILD_ID}
+# export CICD_BUILD_TIMESTAMP=$(date --rfc-3339 seconds)
+ARG CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}
 
-LABEL maintainer="Jean-Baptiste-Laselle <jean.baptiste.lasselle@gmail.com>"
-LABEL author="Jean-Baptiste-Laselle <jean.baptiste.lasselle@gmail.com>"
-LABEL cicd.build.id="${CICD_BUILD_ID}"
-LABEL git.commit.id="${GIT_COMMIT_ID}"
-LABEL daymood="https://www.youtube.com/watch?v=v-JsqKlVVGk&list=RDv-JsqKlVVGk"
-LABEL oci.image.base="httpd:${HTTPD_OCI_IMAGE_TAG}"
+
+LABEL io.ricard-io.cicd.build.id="${CICD_BUILD_ID}"
+LABEL io.ricard-io.cicd.build.timestamp="${CICD_BUILD_TIMESTAMP}"
+LABEL io.ricard-io.git.commit.id="${GIT_COMMIT_ID}"
+LABEL io.ricard-io.daymood="https://www.youtube.com/watch?v=v-JsqKlVVGk&list=RDv-JsqKlVVGk"
+LABEL io.ricard-io.oci.base.image="httpd:${HTTPD_OCI_IMAGE_TAG}"
+LABEL io.ricard-io.golang.version="${GOLANG_VERSION}"
+LABEL io.ricard-io.hugo.version="${HUGO_VERSION}"
+LABEL io.ricard-io.website="https://ricard-io.herokuapp.com"
+LABEL io.ricard-io.github.org="https://github.com/ricard-io"
+LABEL io.ricard-io.author="Jean-Baptiste Lasselle <jean.baptiste.ricard.io@gmail.com>"
+LABEL io.ricard-io.maintainer="Jean-Baptiste Lasselle <jean.baptiste.ricard.io@gmail.com>"
 
 # --- HEROKU ENV.
 #
 # https://help.heroku.com/PPBPA231/how-do-i-use-the-port-environment-variable-in-container-based-apps
 #
 # In a word :
-# Heroku platfor will assign a value to the PORT variable, and
+# Heroku platform will assign a value to the PORT variable, and
 # do the network setup with reverse proxying. So Basically I just haveto know that
 # the PORT environment variable is there where the network will happen, where the network traffic will travel : I can listen on that port if I want, for example
 # At any rate, I should NOT EVER

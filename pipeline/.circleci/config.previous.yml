@@ -76,7 +76,7 @@ jobs:
             echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
             echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
             echo "HEROKU_APP_ID=[${HEROKU_APP_ID}]"
-          name: "Deploy to heroku as https://ric-carl.herokuapp.com/ "
+          name: "Deploy to heroku as https://ricard-io.herokuapp.com/ "
       - run:
           name: "Heroku Check Authentication"
           command: |
@@ -91,7 +91,7 @@ jobs:
             heroku git:remote -a $HEROKU_APP_ID
             heroku stack:set container --app $HEROKU_APP_ID
       - run:
-          name: "Deploy to Heroku via Git, website at https://ric-carl.herokuapp.com/ "
+          name: "Deploy to Heroku via Git, website at https://ricard-io.herokuapp.com/ "
           command: |
             echo "Deploying to Heroku, via git, Deployment defined in the Heroku.yml"
             echo "Checking Circle CI Job env. variables"

@@ -1,32 +1,23 @@
 version: "3.7"
 
 services:
-  hugo_dev:
+  hugo_cms:
     # we need extended, and nodejs for sass!
     image: quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}
-    container_name: hugo_heroku
+    container_name: hugo_cms
     build:
        context: .
-       dockerfile: heroku.Dockerfile
+       dockerfile: cms.Dockerfile
        args:
-         - HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
+         - ALPINE_OCI_IMAGE_TAG=${ALPINE_OCI_IMAGE_TAG}
          - GOLANG_VERSION=${GOLANG_VERSION}
          - HUGO_VERSION=${HUGO_VERSION}
-         - HUGO_BASE_URL=${HUGO_BASE_URL}
          - GIT_COMMIT_ID=${GIT_COMMIT_ID}
-         # - HUGO_BASE_URL=https://ric-carl.herokuapp.com/
-    # command: server
-    environment:
-      - PORT=80
+         - CICD_BUILD_ID=${CICD_BUILD_ID}
+         - CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}
     env_file:
-      - ./.env
-    # volumes:
-      # - .:/src
-    ports:
-      # - 0.0.0.0:1313:1313
-      - 0.0.0.0:8080:80
+      - ./.cms.env
   hugo_heroku:
-    # we need extended, and nodejs for sass!
     image: quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}
     container_name: hugo_heroku
     build:
@@ -34,9 +25,12 @@ services:
        dockerfile: heroku.Dockerfile
        args:
          - HTTPD_OCI_IMAGE_TAG=${HTTPD_OCI_IMAGE_TAG}
+         - ALPINE_OCI_IMAGE_TAG=${ALPINE_OCI_IMAGE_TAG}
          - GOLANG_VERSION=${GOLANG_VERSION}
          - HUGO_VERSION=${HUGO_VERSION}
          - HUGO_BASE_URL=${HUGO_BASE_URL}
          - GIT_COMMIT_ID=${GIT_COMMIT_ID}
+         - CICD_BUILD_ID=${CICD_BUILD_ID}
+         - CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}
     env_file:
       - ./.heroku.env

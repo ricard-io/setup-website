@@ -79,10 +79,10 @@ export FEATURE_ALIAS="heroku-pipeline"
 git checkout "feature/${FEATURE_ALIAS}"
 export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
 export QUAY_OCI_IMAGE_TAG=0.0.1-dev
-docker-compose build hugo_dev
+docker-compose build hugo_cms
 export QUAY_OCI_IMAGE_TAG=0.0.1-heroku
 docker-compose build hugo_heroku
-docker-compose up -d hugo_dev
+docker-compose up -d hugo_cms
 
 export DOCKER_BUILDKIT=0
 export COMPOSE_DOCKER_CLI_BUILD=0 && docker-compose build
@@ -92,12 +92,12 @@ export COMPOSE_DOCKER_CLI_BUILD=1 && docker-compose build
 export D_BUILD_ARGS="--build-arg HTTPD_OCI_IMAGE_TAG=\"2.4\" "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=\"1.15.6\" "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=\"0.78.2\" "
-export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=\"https://ric-carl.herokuapp.com/\" "
+export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=\"https://ricard-io.herokuapp.com/\" "
 
 export D_BUILD_ARGS="--build-arg HTTPD_OCI_IMAGE_TAG=2.4 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=1.15.6 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=0.78.2 "
-export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ric-carl.herokuapp.com/"
+export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ricard-io.herokuapp.com/"
 
 # DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
 # DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
