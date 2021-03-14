@@ -24,15 +24,17 @@ We chose the https://gohugo.io technology for our website :
 
 ## Dev environment
 
-To work on this project, you will need on your machine, to have intalled :
+To work on this project, you have two options:
 
-* git and the git flow AVH edition
-* Golang version `1.15.6`
-* hugo "extended", version `0.78.2`
-
-Below you will find recipes to install Golang and hugo "extended" on a GNU/Linux machine.
+* using the docker-compose
+* or work on a "bare machine" : install all the utilities yourself
 
 ### Docker-Compose
+
+You need installed on your machine :
+* `docker`, and `docker-compose`
+* `git` and the `git-flow AVH Edition` plugin
+
 
 ```bash
 export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
@@ -40,16 +42,22 @@ export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
 git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
 cd "${WHERE_I_WORK}"
 
-export FEATURE_ALIAS='pipeline-setup'
+export FEATURE_ALIAS='dev-compose'
+export DESIRED_VERSION="feature/${FEATURE_ALIAS}"
+git checkout "${DESIRED_VERSION}"
 
-git checkout "feature/${FEATURE_ALIAS}"
-
-docker-compose up -d hugo_dev
-
-
+docker-compose up -d
 ```
 
 ### Debian and GNU / Linux : bare machine
+
+To work on this project, on a "bare" machine, you will need on your machine, to have intalled :
+
+* git and the git flow AVH edition
+* Golang version `1.15.6`
+* hugo "extended", version `0.78.2`
+
+Below you will find recipes to install Golang and hugo "extended" on a GNU/Linux machine.
 
 #### Basic workflow
 
@@ -158,7 +166,8 @@ go version
 ```
 
 
-### CORS configuration of the http server
+
+## ANNEX A: CORS configuration of the http server
 
 The Apache 2 HTTP Server "`httpd`" is used to deploy the website to Heroku. An `httpd.conf` configuration file was added to configure CORS to allow all origins :
 
@@ -169,9 +178,70 @@ The Apache 2 HTTP Server "`httpd`" is used to deploy the website to Heroku. An `
 Header set Access-Control-Allow-Origin "*"
 ```
 
-### Docker images and the GIT COMMIT ID
 
-* To retrieve the GIT COMMIT ID from the latest docker image : `docker inspect --format '{{ index .Config.Labels "git.commit.id"}}' "quay.io/ricard-io/une_proposition:stable-latest"`
+
+
+## ANNEX B: Container Images Metadata
+
+```bash
+export CMS_OCI_IMAGE_GUN=quay.io/ricardio/website:cms
+
+docker pull "${CMS_OCI_IMAGE_GUN}"
+
+export BASE_IMAGE_GUN=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.oci.base.image"}}' "${CMS_OCI_IMAGE_GUN}")
+export GOLANG_VERSION=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.golang.version"}}' "${CMS_OCI_IMAGE_GUN}")
+export HUGO_VERSION=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.hugo.version"}}' "${CMS_OCI_IMAGE_GUN}")
+export GIT_COMMIT_ID=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.git.commit.id"}}' "${CMS_OCI_IMAGE_GUN}")
+export CICD_BUILD_ID=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.cicd.build.id"}}' "${CMS_OCI_IMAGE_GUN}")
+export CICD_BUILD_TIMESTAMP=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.cicd.build.timestamp"}}' "${CMS_OCI_IMAGE_GUN}")
+export PROJECT_WEBSITE=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.project.website"}}' "${CMS_OCI_IMAGE_GUN}")
+export GITHUB_ORG=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.github.org"}}' "${CMS_OCI_IMAGE_GUN}")
+export IMAGE_AUTHOR=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.author"}}' "${CMS_OCI_IMAGE_GUN}")
+export IMAGE_MAINTAINER=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.maintainer"}}' "${CMS_OCI_IMAGE_GUN}")
+
+echo "BASE_IMAGE_GUN=[${BASE_IMAGE_GUN}]"
+echo "GOLANG_VERSION=[${GOLANG_VERSION}]"
+echo "HUGO_VERSION=[${HUGO_VERSION}]"
+echo "GIT_COMMIT_ID=[${GIT_COMMIT_ID}]"
+echo "CICD_BUILD_ID=[${CICD_BUILD_ID}]"
+echo "CICD_BUILD_TIMESTAMP=[${CICD_BUILD_TIMESTAMP}]"
+echo "PROJECT_WEBSITE=[${PROJECT_WEBSITE}]"
+echo "GITHUB_ORG=[${GITHUB_ORG}]"
+echo "IMAGE_AUTHOR=[${IMAGE_AUTHOR}]"
+echo "IMAGE_MAINTAINER=[${IMAGE_MAINTAINER}]"
+
+# ---
+
+export HEROKU_OCI_IMAGE_GUN=quay.io/ricardio/website:${RELEASE_VER_NUM}-latest
+
+docker pull "${HEROKU_OCI_IMAGE_GUN}"
+
+export BASE_IMAGE_GUN=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.oci.base.image"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export GOLANG_VERSION=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.golang.version"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export HUGO_VERSION=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.hugo.version"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export GIT_COMMIT_ID=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.git.commit.id"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export CICD_BUILD_ID=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.cicd.build.id"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export CICD_BUILD_TIMESTAMP=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.cicd.build.timestamp"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export PROJECT_WEBSITE=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.project.website"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export GITHUB_ORG=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.github.org"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export IMAGE_AUTHOR=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.author"}}' "${HEROKU_OCI_IMAGE_GUN}")
+export IMAGE_MAINTAINER=$(docker inspect --format '{{ index .Config.Labels "io.ricard-io.maintainer"}}' "${HEROKU_OCI_IMAGE_GUN}")
+
+echo "BASE_IMAGE_GUN=[${BASE_IMAGE_GUN}]"
+echo "GOLANG_VERSION=[${GOLANG_VERSION}]"
+echo "HUGO_VERSION=[${HUGO_VERSION}]"
+echo "GIT_COMMIT_ID=[${GIT_COMMIT_ID}]"
+echo "CICD_BUILD_ID=[${CICD_BUILD_ID}]"
+echo "CICD_BUILD_TIMESTAMP=[${CICD_BUILD_TIMESTAMP}]"
+echo "PROJECT_WEBSITE=[${PROJECT_WEBSITE}]"
+echo "GITHUB_ORG=[${GITHUB_ORG}]"
+echo "IMAGE_AUTHOR=[${IMAGE_AUTHOR}]"
+echo "IMAGE_MAINTAINER=[${IMAGE_MAINTAINER}]"
+```
+
+#### Example metadata : The GIT COMMIT ID
+
+* To retrieve the GIT COMMIT ID from the latest docker image deployed for the webisite : `docker inspect --format '{{ index .Config.Labels "io.ricard-io.git.commit.id"}}' "quay.io/ricardio/website:stable-latest"`
 * And to find the same commit on a git repo :
 
 ```bash
