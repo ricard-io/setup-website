@@ -15,6 +15,7 @@ services:
          - GIT_COMMIT_ID=${GIT_COMMIT_ID}
          - CICD_BUILD_ID=${CICD_BUILD_ID}
          - CICD_BUILD_TIMESTAMP=${CICD_BUILD_TIMESTAMP}
+         - QUAY_OCI_IMAGE_TAG=${QUAY_OCI_IMAGE_TAG}
     env_file:
       - ./.cms.env
   hugo_heroku:
