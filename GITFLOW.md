@@ -92,12 +92,12 @@ export COMPOSE_DOCKER_CLI_BUILD=1 && docker-compose build
 export D_BUILD_ARGS="--build-arg HTTPD_OCI_IMAGE_TAG=\"2.4\" "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=\"1.15.6\" "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=\"0.78.2\" "
-export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=\"https://ric-carl.herokuapp.com/\" "
+export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=\"https://ricard-io.herokuapp.com/\" "
 
 export D_BUILD_ARGS="--build-arg HTTPD_OCI_IMAGE_TAG=2.4 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=1.15.6 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=0.78.2 "
-export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ric-carl.herokuapp.com/"
+export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ricard-io.herokuapp.com/"
 
 # DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
 # DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
