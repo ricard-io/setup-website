@@ -79,10 +79,10 @@ export FEATURE_ALIAS="heroku-pipeline"
 git checkout "feature/${FEATURE_ALIAS}"
 export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
 export QUAY_OCI_IMAGE_TAG=0.0.1-dev
-docker-compose build hugo_dev
+docker-compose build hugo_cms
 export QUAY_OCI_IMAGE_TAG=0.0.1-heroku
 docker-compose build hugo_heroku
-docker-compose up -d hugo_dev
+docker-compose up -d hugo_cms
 
 export DOCKER_BUILDKIT=0
 export COMPOSE_DOCKER_CLI_BUILD=0 && docker-compose build

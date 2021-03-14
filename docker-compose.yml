@@ -1,10 +1,10 @@
 version: "3.7"
 
 services:
-  hugo_dev:
+  hugo_cms:
     # we need extended, and nodejs for sass!
     image: quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
-    container_name: hugo_dev
+    container_name: hugo_cms
     build:
        context: .
        dockerfile: dev.Dockerfile
@@ -19,7 +19,7 @@ services:
     # environment:
       # - HUGO_BASE_URL=${HUGO_BASE_URL}
     env_file:
-      - ./.env.dev
+      - ./.cms.cms
     volumes:
       - .:/ricard-io.io/hugo/src/:rw
     ports:
