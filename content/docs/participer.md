@@ -38,4 +38,4 @@ Vous pouvez aussi le faire en envoyant votre pull request (our ceux qui savent c
 
 ### Participer à la partie technique de ce projet
 
-Pour participer à tout aspect technqiue de ce projet, vous avez les issues Github, les pull request, et vous pouvez éventuellement me contacter rrigés, à l'adresse email suivante : __jean.baptiste.lasselle.ric1718@gmail.com__
+Pour participer à tout aspect technqiue de ce projet, vous avez les issues Github, les pull request, et vous pouvez éventuellement me contacter rrigés, à l'adresse email suivante : __jean.baptiste.lasselle.ricard-io@gmail.com__

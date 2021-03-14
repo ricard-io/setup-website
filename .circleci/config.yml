@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   secrethub_org:
     type: string
-    default: "ric1718"
+    default: "ricard-io"
     description: "SecretHub Org to use to fetch secrets ?"
   secrethub_repo:
     type: string
@@ -32,32 +32,32 @@ jobs:
             echo "Checking Circle CI Job env. variables"
             echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
             echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
-            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/heroku/api-token")
             source .heroku.env
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
             export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
-            docker-compose build hugo_heroku
-            # and now [quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
+            docker-compose -f ./docker-compose.build.yml build hugo_heroku
+            # and now [quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
       - run:
           command: |
             echo "Checking Circle CI Job env. variables"
             echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
             echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
-            QUAY_BOT_USERNAME=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/oci/quay-io/user-name)
-            QUAY_BOT_SECRET=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/oci/quay-io/user-pwd)
+            QUAY_BOT_USERNAME=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/oci/quay-io/user-name)
+            QUAY_BOT_SECRET=$(secrethub read ${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/oci/quay-io/user-pwd)
             echo "QUAY_BOT_USERNAME=[${QUAY_BOT_USERNAME}]"
             # echo "QUAY_BOT_SECRET=[${QUAY_BOT_SECRET}]"
             docker login -u="${QUAY_BOT_USERNAME}" -p="${QUAY_BOT_SECRET}" quay.io
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
-            docker tag "quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}" "quay.io/ric1718/une_proposition:stable-latest"
+            docker tag "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}" "quay.io/ricard-io/une_proposition:stable-latest"
             echo "checking [date time] (sometimes data time in Circle CI pipelines is wrong, so that Container registry rejects the [docker push]...)"
             echo "date time in Circle CI Pipeline is [$(date)] "
             date
-            docker push "quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}"
-            docker push "quay.io/ric1718/une_proposition:stable-latest"
+            docker push "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}"
+            docker push "quay.io/ricard-io/une_proposition:stable-latest"
           name: "Container Image publish to Container Registry"
 
   deploy_to_heroku:
@@ -67,7 +67,7 @@ jobs:
     environment:
       SECRETHUB_ORG: << pipeline.parameters.secrethub_org >>
       SECRETHUB_REPO: << pipeline.parameters.secrethub_repo >>
-      HEROKU_APP_ID: ric-carl
+      HEROKU_APP_ID: "ricard-io"
     steps:
       - checkout
       - secrethub/install
@@ -76,19 +76,19 @@ jobs:
           name: "Heroku Check Authentication"
           command: |
             echo "Checking Heroku Authentication is successful, with the secrethub provided Heroku API Token"
-            echo "Checking context variables from [riccarl-cicd] context"
+            echo "Checking context variables from [ricard-io-cicd] context"
             echo "Checking Circle CI Job env. variables"
             echo "SECRETHUB_ORG=[${SECRETHUB_ORG}]"
             echo "SECRETHUB_REPO=[${SECRETHUB_REPO}]"
             echo "HEROKU_APP_ID=[${HEROKU_APP_ID}]"
             # that's just to check how to
-            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/heroku/api-token")
             heroku auth:whoami
       - run:
           name: "Set Heroku Stack to [container]"
           command: |
             echo "Initializing Heroku Git repo"
-            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/heroku/api-token")
             heroku git:remote -a $HEROKU_APP_ID
             heroku stack:set container --app $HEROKU_APP_ID
       - run:
@@ -100,25 +100,25 @@ jobs:
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
-            docker pull quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}
-            # [quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG}] should now be among local [docker images]
+            docker pull quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
+            # [quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}] should now be among local [docker images]
       - run:
-          name: "Deploy to Heroku by docker pushing container image, website at https://ric-carl.herokuapp.com/ "
+          name: "Deploy to Heroku by docker pushing container image, website at https://ricard-io.herokuapp.com/ "
           command: |
             echo "Deploying to Heroku, by pushing the built docker image, and release it using the Heroku API"
             # the process type, is the thing that you can find in the `heroku.yml` (for me it's `web`, and
             # there are others, which I don't care about like for backends I guess, stuff like that)
             export HEROKU_PROCESS_TYPE=web
-            export SECRETHUB_ORG=ric1718
+            export SECRETHUB_ORG=ricard-io
             export SECRETHUB_REPO=cicd
-            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+            export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/heroku/api-token")
 
             docker login --username=_ --password=${HEROKU_API_KEY} registry.heroku.com
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
 
-            docker tag quay.io/ric1718/une_proposition:${QUAY_OCI_IMAGE_TAG} registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
+            docker tag quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG} registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
             docker push registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
 
             # ---
@@ -158,25 +158,26 @@ workflows:
   build_and_deploy:
     jobs:
       - container_images_publish:
-          context: riccarl-cicd
+          context: ricard-io-cicd
           filters:
             branches:
               ignore:
                 - master
                 - develop
-                - /^feature*/
-                - /^support*/
-                - /^bugfix*/
-                - /^hotfix*/
-                - /^release*/
+                # ---
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # ---
             tags:
-              # only: /^v.*/
               only:
                 - /^[0-999].[0-999].[0-999]/
                 - /^[0-999].[0-999].[0-999]-alpha/
                 - /^[0-999].[0-999].[0-999]-beta/
       - deploy_to_heroku:
-          context: riccarl-cicd
+          context: ricard-io-cicd
           requires:
             - container_images_publish
           filters:
@@ -184,13 +185,14 @@ workflows:
               ignore:
                 - master
                 - develop
-                - /^feature*/
-                - /^support*/
-                - /^bugfix*/
-                - /^hotfix*/
-                - /^releases*/
+                # ---
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # ---
             tags:
-              # only: /^v.*/
               only:
                 - /^[0-999].[0-999].[0-999]/
                 - /^[0-999].[0-999].[0-999]-alpha/

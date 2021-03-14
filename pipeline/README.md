@@ -7,7 +7,7 @@
 ```bash
 git clone git@github.com:1718-io/propositions-relatives-au-ric.git ./propositions-relatives-au-ric
 cd ./propositions-relatives-au-ric
-export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/carlbot/heroku/api-token")
+export HEROKU_API_KEY=$(secrethub read "${SECRETHUB_ORG}/${SECRETHUB_REPO}/ricard_io_bot/heroku/api-token")
 heroku auth:whoami
 export HEROKU_APP_ID=ric-carl
 heroku git:remote -a $HEROKU_APP_ID

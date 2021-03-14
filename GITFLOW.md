@@ -30,7 +30,8 @@ ssh -Ti ~/.ssh.perso.backed/id_rsa git@github.com
 git clone git@github.com:1718-io/propositions-relatives-au-ric.git ~/propositions-relatives-au-ric
 cd ~/propositions-relatives-au-ric
 
-export FEATURE_ALIAS='ric-interne'
+export FEATURE_ALIAS='pipeline-setup'
+export FEATURE_ALIAS='pipeline-setup'
 git flow feature start ${FEATURE_ALIAS} && git push -u origin --all
 git checkout "feature/${FEATURE_ALIAS}"
 export COMMIT_MESSAGE="feat.(${FEATURE_ALIAS}): adding build and run with https://github.com/gravitee-io/gravitee-docs/blob/master/Dockerfile "
@@ -98,8 +99,8 @@ export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg GOLANG_VERSION=1.15.6 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_VERSION=0.78.2 "
 export D_BUILD_ARGS="${D_BUILD_ARGS} --build-arg HUGO_BASE_URL=https://ric-carl.herokuapp.com/"
 
-# DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ric1718/une_proposition:dev
-# DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ric1718/une_proposition:dev
+# DOCKER_BUILDKIT=0 docker build -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
+# DOCKER_BUILDKIT=0 docker build ${D_BUILD_ARGS} -f heroku.Dockerfile . -t quay.io/ricard-io/une_proposition:dev
 
 # docker-compose down --rmi all && docker system prune -f --all && cd && rm -fr ~/propositions-relatives-au-ric
 ```
