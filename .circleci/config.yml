@@ -39,7 +39,7 @@ jobs:
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
             export GIT_COMMIT_ID=$(git rev-parse --short HEAD)
             docker-compose -f ./docker-compose.build.yml build hugo_heroku
-            # and now [quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
+            # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
       - run:
           command: |
             echo "Checking Circle CI Job env. variables"
@@ -52,12 +52,12 @@ jobs:
             docker login -u="${QUAY_BOT_USERNAME}" -p="${QUAY_BOT_SECRET}" quay.io
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
-            docker tag "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}" "quay.io/ricard-io/une_proposition:stable-latest"
+            docker tag "quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}" "quay.io/ricardio/website:stable-latest"
             echo "checking [date time] (sometimes data time in Circle CI pipelines is wrong, so that Container registry rejects the [docker push]...)"
             echo "date time in Circle CI Pipeline is [$(date)] "
             date
-            docker push "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}"
-            docker push "quay.io/ricard-io/une_proposition:stable-latest"
+            docker push "quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}"
+            docker push "quay.io/ricardio/website:stable-latest"
           name: "Container Image publish to Container Registry"
 
   deploy_to_heroku:
@@ -100,8 +100,8 @@ jobs:
             export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
-            docker pull quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
-            # [quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}] should now be among local [docker images]
+            docker pull quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}
+            # [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should now be among local [docker images]
       - run:
           name: "Deploy to Heroku by docker pushing container image, website at https://ricard-io.herokuapp.com/ "
           command: |
@@ -118,7 +118,7 @@ jobs:
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
 
-            docker tag quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG} registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
+            docker tag quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG} registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
             docker push registry.heroku.com/${HEROKU_APP_ID}/${HEROKU_PROCESS_TYPE}
 
             # ---
