@@ -19,7 +19,7 @@ services:
     environment:
       - HUGO_BASE_URL=${HUGO_BASE_URL}
     env_file:
-      - ./.env
+      - ./.env.dev
     volumes:
       - .:/ricard-io.io/hugo/src/:rw
     ports:
