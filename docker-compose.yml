@@ -16,8 +16,8 @@ services:
          - GIT_COMMIT_ID=${GIT_COMMIT_ID}
          # - HUGO_BASE_URL=https://ric-carl.herokuapp.com/
     command: hugo serve --watch -b ${HUGO_BASE_URL}
-    environment:
-      - HUGO_BASE_URL=${HUGO_BASE_URL}
+    # environment:
+      # - HUGO_BASE_URL=${HUGO_BASE_URL}
     env_file:
       - ./.env.dev
     volumes:
