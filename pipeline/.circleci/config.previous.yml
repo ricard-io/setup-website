@@ -49,12 +49,12 @@ jobs:
                     docker login -u="${QUAY_BOT_USERNAME}" -p="${QUAY_BOT_SECRET}" quay.io
                     export GIT_RELEASE_TAG=$(git describe --tags --abbrev=0)
                     export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-heroku
-                    docker tag "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}" "quay.io/ricard-io/une_proposition:stable-latest"
+                    docker tag "quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}" "quay.io/ricardio/website:stable-latest"
                     echo "checking [date time] (sometimes data time in Circle CI pipelines is wrong, so that Container registry rejects the [docker push]...)"
                     echo "date time in Circle CI Pipeline is [$(date)] "
                     date
-                    docker push "quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}"
-                    docker push "quay.io/ricard-io/une_proposition:stable-latest"
+                    docker push "quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}"
+                    docker push "quay.io/ricardio/website:stable-latest"
           name: "Container images publish to quay.io"
 
   deploy_to_heroku:

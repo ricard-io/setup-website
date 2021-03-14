@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   hugo_cms:
-    image: quay.io/ricard-io/une_proposition:${QUAY_OCI_IMAGE_TAG}
+    image: quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}
     container_name: hugo_cms
     command: hugo serve --watch --baseURL http://127.0.0.1:1313/ -b 0.0.0.0
     # environment:
