@@ -419,3 +419,17 @@ workflows:
     jobs:
       - empty_job:
           context: ricard-io-cicd
+          filters:
+            branches:
+              ignore:
+                # --- git flow
+                - master
+                - develop
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # --- CMS
+                - /^content\/.*/
+                # ---
