@@ -1,6 +1,10 @@
 version: 2.1
 
 parameters:
+  admin_task:
+    type: enum
+    enum: [delete_oci_image, blank]
+    default: blank
   secrethub_org:
     type: string
     default: "ricard-io"
@@ -9,12 +13,24 @@ parameters:
     type: string
     default: "cicd"
     description: "SecretHub Repo to use to fetch secrets ?"
-
+  oci_image_tag:
+    type: string
+    default: "develop-cms"
+    description: "What is the container tag of the contaienr image to delete from ricard-io 's Quay.io Container registry ?"
 orbs:
   heroku: circleci/heroku@1.2.3
   docker: circleci/docker@1.5
   secrethub: secrethub/cli@1.0.0
 jobs:
+  empty_job:
+    docker:
+     - image: alpine
+    resource_class: small
+    working_directory: /mnt/ramdisk
+    steps:
+      - run:
+          name: "This is a blank job"
+          command: echo "No task is executed."
   container_images_publish:
     machine:
       image: 'ubuntu-1604:201903-01'
@@ -224,6 +240,20 @@ jobs:
       - checkout
       - secrethub/install
       - docker/install-docker-compose
+
+      - run:
+          name: "Content Management: Deliver Content (Docker build and push the ilmage from the work branch)"
+          command: |
+            export GIT_RELEASE_TAG=$(echo "${GIT_BRANCH_NAME}" | sed "s#\/#_#g")
+            export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-cms
+            echo "# ---"
+            echo "# Triggered every time a content writer git pushes"
+            echo "# the "READY_${CONTENT_ALIAS}_${USERNAME_ALIAS}" git tag to"
+            echo "# submit his work: Docker builds and push the [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] docker image of"
+            echo "# the work done by the conributor."
+            echo "# ---"
+            echo "Not implemented yet"
+            exit 1
       - run:
           name: "Content Management: Deliver Content (create the Pull Request)"
           command: |
@@ -231,7 +261,29 @@ jobs:
             echo "# Triggered every time a content writer git pushes"
             echo "# the "READY_${CONTENT_ALIAS}_${USERNAME_ALIAS}" git tag to"
             echo "# submit his work: then octokit will create a PR to develop"
+            echo "# In the PR description, will be added : "
+            echo "# 1./ command to run the docker compose with the [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] docker image, to verify the work done by the contributor"
+            echo "# 2./ command to delete the [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] docker image from Container registry, to clean up Quay.io account (this command will be a curl to launch the Circle CI Pipeline to delete an image)"
+            echo "#      The exact curl command to launch the pipeline will be set with $(cat cms.users.utilities/admin/delete-image.sh)"
+            cat ./cms.users.utilities/admin/delete-image.sh
             echo "# ---"
+            echo "Not implemented yet"
+            exit 1
+
+  delete_oci_image_job:
+    machine:
+      image: 'ubuntu-1604:201903-01'
+      resource_class: medium
+    environment:
+      OCI_IMAGE_TAG: << pipeline.parameters.oci_image_tag >>
+    steps:
+      - checkout
+      - secrethub/install
+      - docker/install-docker-compose
+      - run:
+          name: "Content Management: Hugo Build (checking no hugo build error occurs)"
+          command: |
+            echo "Here commands to delete an image from the container registry"
             echo "Not implemented yet"
             exit 1
 
@@ -264,16 +316,7 @@ jobs:
             docker-compose -f ./docker-compose.heroku.build.yml build hugo_heroku
             # and now [quay.io/ricardio/website:${QUAY_OCI_IMAGE_TAG}] should exists among [docker images]
             docker images
-      - run:
-          name: "Content Management: deliver with Pull Request"
-          command: |
-            echo "# ---"
-            echo "# Triggered every time a content writer git pushes"
-            echo "# the "READY_\${GIT_BRANCH_NAME}" git tag to"
-            echo "# submit his work: then octokit will create a PR to the git develop"
-            echo "# ---"
-            echo "Not implemented yet"
-            exit 1
+
 
 workflows:
   version: 2.1
@@ -361,3 +404,18 @@ workflows:
             tags:
               only:
                 - /^READY_.*/
+
+  delete_oci_image_job:
+    when:
+      equal: [ delete_oci_image, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - delete_oci_image_job:
+          context: ricard-io-cicd
+  # ---
+  # Blank process invoked by default
+  blank:
+    when:
+      equal: [ blank, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - empty_job:
+          context: cicd-orchestrator
