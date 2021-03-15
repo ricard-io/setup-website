@@ -346,8 +346,16 @@ workflows:
           context: ricard-io-cicd
           filters:
             branches:
-              only:
-                # ---
+              ignore:
+                # --- git flow
+                - master
+                - develop
+                - /^feature\/.*/
+                - /^support\/.*/
+                - /^bugfix\/.*/
+                - /^hotfix\/.*/
+                - /^release\/.*/
+                # --- CMS
                 - /^content\/.*/
                 # ---
             tags:
