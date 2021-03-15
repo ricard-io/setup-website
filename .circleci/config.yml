@@ -418,4 +418,4 @@ workflows:
       equal: [ blank, << pipeline.parameters.admin_task >> ]
     jobs:
       - empty_job:
-          context: cicd-orchestrator
+          context: ricard-io-cicd
