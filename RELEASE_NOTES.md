@@ -19,7 +19,7 @@ You need installed on your machine :
 
 #### GNU/Linux and MacOS
 
-* Open a terminal shell session, type the `bash` command, hit the Return keyborad key, and then run :
+* Open a terminal shell session, type the `bash` command, hit the Return keyboard key, and then run :
 
 ```bash
 export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
@@ -27,12 +27,25 @@ export WHERE_I_WORK=$(mktemp -d -t ricard-io-website_XXXXXX)
 git clone git@github.com:ricard-io/setup-website.git "${WHERE_I_WORK}"
 cd "${WHERE_I_WORK}"
 
-export FEATURE_ALIAS='dev-compose'
-export DESIRED_VERSION="feature/${FEATURE_ALIAS}"
 export DESIRED_VERSION="0.0.1"
 
 git checkout "${DESIRED_VERSION}"
 
-./cms.users.utilities/cms.image.build.sh
+docker-compose up -d
+```
+
+#### GNU/Linux and MacOS
+
+* Open a terminal shell session, type the `bash` command, hit the Return keyboard key, and then run :
+
+```bash
+
+git clone git@github.com:ricard-io/setup-website.git ./ricard-io-website
+cd ./ricard-io-website
+
+export DESIRED_VERSION="0.0.1"
+
+git checkout "${DESIRED_VERSION}"
+
 docker-compose up -d
 ```
