@@ -407,7 +407,7 @@ workflows:
 
   delete_oci_image_job:
     when:
-      equal: [ delete_oci_image, << pipeline.parameters.gio_action >> ]
+      equal: [ delete_oci_image, << pipeline.parameters.admin_task >> ]
     jobs:
       - delete_oci_image_job:
           context: ricard-io-cicd
@@ -415,7 +415,7 @@ workflows:
   # Blank process invoked by default
   blank:
     when:
-      equal: [ blank, << pipeline.parameters.gio_action >> ]
+      equal: [ blank, << pipeline.parameters.admin_task >> ]
     jobs:
       - empty_job:
           context: cicd-orchestrator
