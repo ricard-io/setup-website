@@ -7,6 +7,8 @@ title = "Un Ricard sinon rien : Origine et Objectifs"
 
 # Un Ricard sinon rien : Qu'est-ce que c'est ?
 
+### Une modif faite sur la branche `content/jbl-test1`
+
 Nous sommes un groupe de travail, se concentrant sur deux objectifs :
 
 > * Fournir aux citoyen français une technologie logicielle qui lui permette de souverainetement organiser des votes, de toutes nature.
