@@ -284,14 +284,16 @@ workflows:
           filters:
             branches:
               ignore:
+                # --- git flow
                 - master
                 - develop
-                # ---
                 - /^feature\/.*/
                 - /^support\/.*/
                 - /^bugfix\/.*/
                 - /^hotfix\/.*/
                 - /^release\/.*/
+                # --- CMS
+                - /^content\/.*/
                 # ---
             tags:
               only:
@@ -305,14 +307,16 @@ workflows:
           filters:
             branches:
               ignore:
+                # --- git flow
                 - master
                 - develop
-                # ---
                 - /^feature\/.*/
                 - /^support\/.*/
                 - /^bugfix\/.*/
                 - /^hotfix\/.*/
                 - /^release\/.*/
+                # --- CMS
+                - /^content\/.*/
                 # ---
             tags:
               only:
