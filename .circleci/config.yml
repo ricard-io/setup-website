@@ -249,7 +249,7 @@ jobs:
           command: |
             echo "Checking Circle CI Job env. variables"
             export GIT_BRANCH_NAME=$(git branch -a | grep '*' | awk '{print $2}')
-            export GIT_RELEASE_TAG=${GIT_BRANCH_NAME}
+            export GIT_RELEASE_TAG=$(echo "${GIT_BRANCH_NAME}" | sed "s#\/#_#g")
             export QUAY_OCI_IMAGE_TAG=${GIT_RELEASE_TAG}-cms
             echo "QUAY_OCI_IMAGE_TAG=[${QUAY_OCI_IMAGE_TAG}]"
             source .heroku.env
