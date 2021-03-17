@@ -25,7 +25,6 @@ Le RIC (Référendum d'Initiative Citoyenne) est une idée, un concept, qui à l
 
 
 
-
 {{< /column >}}
 {{< column >}}
 ![L'idée du RIC](./images/ric_accueil.png)
